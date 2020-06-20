@@ -1,0 +1,16 @@
+certifi==2020.4.5.2
+chardet==3.0.4
+click==7.1.2
+Flask==1.1.2
+idna==2.9
+itsdangerous==1.1.0
+Jinja2==2.11.2
+MarkupSafe==1.1.1
+numpy==1.18.5
+opencv-python==4.2.0.34
+pyzbar==0.1.8
+requests==2.24.0
+simplejson==3.17.0
+urllib3==1.25.9
+waitress==1.4.4
+Werkzeug==1.0.1
