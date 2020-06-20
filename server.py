@@ -10,7 +10,6 @@ GlobalFileID = 0
 
 def get_objects_from_image(filename):
     image = cv2.imread(str(filename))
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     decodedObjects = pyzbar.decode(image)
     return decodedObjects #json.dumps({"code": 200, decodedObjects})
 
@@ -20,7 +19,10 @@ def index():
 
 @app.route('/test', methods=['GET','POST'])
 def test():
+    start = time.time()
     objects = get_objects_from_image("test.jpg")
+    timems = int((time.time() - start) * 1000)
+    return json.dumps({"code": 200, "time_ms": timems, "barcodes": objects})
 
 @app.route('/barcode', methods=['POST'])
 def process_post():
@@ -41,4 +43,4 @@ def process_post():
 if __name__ == '__main__':
     from waitress import serve
     serve(app, host="0.0.0.0", port=5000)
-    #app.run(debug=False)
+    #app.run(debug=True)
