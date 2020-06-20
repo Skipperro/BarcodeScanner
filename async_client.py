@@ -3,6 +3,7 @@ import time
 import simplejson as json
 import requests
 import threading
+import os
 
 cap = cv2.VideoCapture(0)
 font = cv2.FONT_HERSHEY_PLAIN
@@ -10,6 +11,8 @@ cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
 cap.set(cv2.CAP_PROP_FOCUS, 100)
 cap.set(3, 1280)
 cap.set(4, 720)
+
+serverIP = "52.29.176.28"
 
 def update_detection():
     global original_frame, response
@@ -19,8 +22,12 @@ def update_detection():
     fileID = "frame.jpg"
     cv2.imwrite(fileID, image, [cv2.IMWRITE_JPEG_QUALITY, 80])
     with open(fileID, 'rb') as f:
-        r = requests.post('http://52.29.176.28:5000/barcode', files={'image': f})
+        r = requests.post('http://' + serverIP + ':5000/barcode', files={'image': f})
     response = json.loads(r.content)
+    if len(response['barcodes']) > 0:
+        for code in response['barcodes']:
+            print("Information : \n Found Type : {} Barcode : {}".format(code['type'], code['data']))
+        time.sleep(2)
 
 lastprinted = time.time()
 
@@ -44,11 +51,14 @@ def process_frame():
             text = "{} ( {} )".format(obj['data'], obj['type'])
             cv2.putText(current_frame, text, (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 0.8, (0, 0, 255), 2)
 
+        cv2.rectangle(current_frame, (0, 0), (0 + 280, 0 + 40), (0, 0, 0), 50)
+
         cv2.putText(current_frame,
                     "Server-side: " + str(response['time_ms']) + " ms",
-                    (0, 50), cv2.FONT_HERSHEY_DUPLEX, 0.8, (0, 0, 0), 2)
+                    (3, 50), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 2)
         timems = int((time.time() - start) * 1000)
-        cv2.putText(current_frame, "Webcam FPS: " + str(int(1000 / timems)), (0, 25), cv2.FONT_HERSHEY_DUPLEX, 0.8, (0, 0, 0),
+
+        cv2.putText(current_frame, "Webcam FPS: " + str(int(1000 / timems)), (3, 25), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255),
                     2)
 
 def main():
