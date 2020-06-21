@@ -10,7 +10,7 @@ GlobalFileID = 0
 
 def get_objects_from_image(filename):
     image = cv2.imread(str(filename))
-    decodedObjects = pyzbar.decode(image)
+    decodedObjects = pyzbar.decode(image, [pyzbar.ZBarSymbol.CODE39, pyzbar.ZBarSymbol.CODE128, pyzbar.ZBarSymbol.EAN13, pyzbar.ZBarSymbol.QRCODE])
     return decodedObjects #json.dumps({"code": 200, decodedObjects})
 
 @app.route('/', methods=['GET','POST'])
@@ -33,9 +33,9 @@ def process_post():
         if GlobalFileID > 100000:
             GlobalFileID = 0
         FileID = GlobalFileID
-        f.save(str(FileID))
-        objects = get_objects_from_image(str(FileID))
-        os.remove(str(FileID))
+        f.save('/dev/shm/' + str(FileID))
+        objects = get_objects_from_image('/dev/shm/' + str(FileID))
+        os.remove('/dev/shm/' + str(FileID))
         timems = int((time.time() - start)*1000)
         return json.dumps({"code":200, "time_ms": timems, "barcodes": objects})
 

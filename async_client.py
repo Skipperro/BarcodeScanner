@@ -13,6 +13,7 @@ cap.set(3, 1280)
 cap.set(4, 720)
 
 serverIP = "52.29.176.28"
+#serverIP = "127.0.0.1"
 
 def update_detection():
     global original_frame, response
