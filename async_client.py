@@ -13,8 +13,8 @@ cap.set(3, 1280)
 cap.set(4, 720)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
-#serverIP = "52.29.176.28"
-serverIP = "127.0.0.1"
+serverIP = "52.29.176.28"
+#serverIP = "127.0.0.1"
 
 last_update = time.time()
 last_time = 0.0

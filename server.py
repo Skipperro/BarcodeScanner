@@ -39,6 +39,7 @@ def process_post():
         if GlobalFileID > 100000:
             GlobalFileID = 0
         FileID = GlobalFileID
+        GlobalFileID += 1
         f.save('/dev/shm/' + str(FileID))
         objects = get_objects_from_image('/dev/shm/' + str(FileID))
         os.remove('/dev/shm/' + str(FileID))
