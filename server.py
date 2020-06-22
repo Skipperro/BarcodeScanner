@@ -35,7 +35,7 @@ def process_post():
     start = time.time()
     if request.method == 'POST':
         f = list(request.files.values())[0]
-        FileID = uuid.uuid4()
+        FileID = str(uuid.uuid4())
         f.save('/dev/shm/' + str(FileID))
         objects = get_objects_from_image('/dev/shm/' + str(FileID))
         os.remove('/dev/shm/' + str(FileID))
