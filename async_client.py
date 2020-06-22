@@ -24,6 +24,8 @@ def update_detection():
     if original_frame is None:
         return
     image = cv2.cvtColor(original_frame, cv2.COLOR_BGR2GRAY)
+    image -= image.min()
+    image = np.array(image * 255.0/image.max(), dtype='uint8')
     fileID = "frame.jpg"
     cv2.imwrite(fileID, image, [cv2.IMWRITE_JPEG_QUALITY, 90])
     with open(fileID, 'rb') as f:

@@ -4,12 +4,18 @@ import os
 from pyzbar import pyzbar
 import simplejson as json
 import time
+import numpy as np
 
 app = Flask(__name__)
 GlobalFileID = 0
 
 def get_objects_from_image(filename):
     image = cv2.imread(str(filename))
+    if len(image.shape) > 2:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if image.min() > 0 or image.max() < 255:
+        image -= image.min()
+        image = np.array(image * 255.0 / image.max(), dtype='uint8')
     decodedObjects = pyzbar.decode(image, [pyzbar.ZBarSymbol.CODE39, pyzbar.ZBarSymbol.CODE128, pyzbar.ZBarSymbol.EAN13, pyzbar.ZBarSymbol.QRCODE])
     return decodedObjects #json.dumps({"code": 200, decodedObjects})
 
