@@ -35,7 +35,7 @@ def process_post():
     start = time.time()
     global GlobalFileID
     if request.method == 'POST':
-        f = request.files['image']
+        f = list(request.files.values())[0]
         if GlobalFileID > 100000:
             GlobalFileID = 0
         FileID = GlobalFileID
@@ -47,6 +47,6 @@ def process_post():
 
 
 if __name__ == '__main__':
-    from waitress import serve
-    serve(app, host="0.0.0.0", port=5000)
-    #app.run(debug=True)
+    #from waitress import serve
+    #serve(app, host="0.0.0.0", port=5000)
+    app.run(host='0.0.0.0', debug=True)

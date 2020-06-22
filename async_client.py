@@ -13,8 +13,8 @@ cap.set(3, 1280)
 cap.set(4, 720)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
-serverIP = "52.29.176.28"
-#serverIP = "127.0.0.1"
+#serverIP = "52.29.176.28"
+serverIP = "127.0.0.1"
 
 last_update = time.time()
 last_time = 0.0
@@ -29,7 +29,7 @@ def update_detection():
     fileID = "frame.jpg"
     cv2.imwrite(fileID, image, [cv2.IMWRITE_JPEG_QUALITY, 90])
     with open(fileID, 'rb') as f:
-        r = requests.post('http://' + serverIP + ':5000/barcode', files={'image': f})
+        r = requests.post('http://' + serverIP + ':5000/barcode', files={'frame': f})
     response = json.loads(r.content)
     if len(response['barcodes']) > 0:
         for code in response['barcodes']:
