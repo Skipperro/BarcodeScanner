@@ -5,9 +5,9 @@ from pyzbar import pyzbar
 import simplejson as json
 import time
 import numpy as np
+import uuid
 
 app = Flask(__name__)
-GlobalFileID = 0
 
 def get_objects_from_image(filename):
     image = cv2.imread(str(filename))
@@ -33,18 +33,14 @@ def test():
 @app.route('/barcode', methods=['POST'])
 def process_post():
     start = time.time()
-    global GlobalFileID
     if request.method == 'POST':
         f = list(request.files.values())[0]
-        if GlobalFileID > 100000:
-            GlobalFileID = 0
-        FileID = GlobalFileID
-        GlobalFileID += 1
+        FileID = uuid.uuid4()
         f.save('/dev/shm/' + str(FileID))
         objects = get_objects_from_image('/dev/shm/' + str(FileID))
         os.remove('/dev/shm/' + str(FileID))
         timems = int((time.time() - start)*1000)
-        return json.dumps({"code":200, "time_ms": timems, "barcodes": objects})
+        return json.dumps({"uuid":FileID, "time_ms": timems, "barcodes": objects})
 
 
 if __name__ == '__main__':
