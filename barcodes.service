@@ -1,0 +1,13 @@
+[Unit]
+Description=Skipperro's Barcode Scanner service
+After=network.target
+StartLimitIntervalSec=300
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=ubuntu
+ExecStart=/usr/bin/python3 /home/ubuntu/BarcodeScanner/server.py
+
+[Install]
+WantedBy=multi-user.target
