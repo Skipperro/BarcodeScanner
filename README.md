@@ -13,6 +13,7 @@ For installation on standard Ubuntu AWS Server with "ubuntu" user.
 ```
 git clone https://github.com/Skipperro/BarcodeScanner.git
 sudo cp /home/ubuntu/BarcodeScanner/barcodes.service /etc/systemd/system/barcodes.service
+sudo systemctl daemon-reload
 sudo systemctl start barcodes
 sudo systemctl enable barcodes
 ```
