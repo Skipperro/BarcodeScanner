@@ -27,7 +27,7 @@ def update_detection():
     image -= image.min()
     image = np.array(image * 255.0/image.max(), dtype='uint8')
     fileID = "frame.jpg"
-    cv2.imwrite(fileID, image, [cv2.IMWRITE_JPEG_QUALITY, 90])
+    cv2.imwrite(fileID, image, [cv2.IMWRITE_JPEG_QUALITY, 70])
     with open(fileID, 'rb') as f:
         r = requests.post('http://' + serverIP + ':5000/barcode', files={'frame': f})
     response = json.loads(r.content)

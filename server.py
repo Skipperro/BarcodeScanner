@@ -10,14 +10,20 @@ import uuid
 app = Flask(__name__)
 
 def get_objects_from_image(filename):
-    image = cv2.imread(str(filename))
-    if len(image.shape) > 2:
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    if image.min() > 0 or image.max() < 255:
-        image -= image.min()
-        image = np.array(image * 255.0 / image.max(), dtype='uint8')
-    decodedObjects = pyzbar.decode(image, [pyzbar.ZBarSymbol.CODE39, pyzbar.ZBarSymbol.CODE128, pyzbar.ZBarSymbol.EAN13, pyzbar.ZBarSymbol.QRCODE])
-    return decodedObjects #json.dumps({"code": 200, decodedObjects})
+    try:
+        image = cv2.imread(str(filename))
+        if len(image.shape) > 2:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        if image.min() > 0 or image.max() < 255:
+            image -= image.min()
+            image = np.array(image * 255.0 / image.max(), dtype='uint8')
+        decodedObjects = pyzbar.decode(image,
+                                       [pyzbar.ZBarSymbol.CODE128, pyzbar.ZBarSymbol.EAN13, pyzbar.ZBarSymbol.QRCODE])
+        return decodedObjects  # json.dumps({"code": 200, decodedObjects})
+    except Exception as e:
+        print(e)
+        return None
+
 
 @app.route('/', methods=['GET','POST'])
 def index():
@@ -25,22 +31,35 @@ def index():
 
 @app.route('/test', methods=['GET','POST'])
 def test():
-    start = time.time()
-    objects = get_objects_from_image("test.jpg")
-    timems = int((time.time() - start) * 1000)
-    return json.dumps({"code": 200, "time_ms": timems, "barcodes": objects})
+    try:
+        start = time.time()
+        objects = get_objects_from_image("test.jpg")
+        if objects is None:
+            return "[]"
+        timems = int((time.time() - start) * 1000)
+        return json.dumps({"code": 200, "time_ms": timems, "barcodes": objects})
+    except Exception as e:
+        print(e)
+        return "[]"
 
 @app.route('/barcode', methods=['POST'])
 def process_post():
-    start = time.time()
-    if request.method == 'POST':
-        f = list(request.files.values())[0]
-        FileID = str(uuid.uuid4())
-        f.save('/dev/shm/' + str(FileID))
-        objects = get_objects_from_image('/dev/shm/' + str(FileID))
-        os.remove('/dev/shm/' + str(FileID))
-        timems = int((time.time() - start)*1000)
-        return json.dumps({"uuid":FileID, "time_ms": timems, "barcodes": objects})
+    try:
+        start = time.time()
+        if request.method == 'POST':
+            f = list(request.files.values())[0]
+            FileID = str(uuid.uuid4())
+            f.save('/dev/shm/' + str(FileID))
+            objects = get_objects_from_image('/dev/shm/' + str(FileID))
+            if objects is None:
+                return "[]"
+            os.remove('/dev/shm/' + str(FileID))
+            timems = int((time.time() - start) * 1000)
+            return json.dumps({"uuid": FileID, "time_ms": timems, "barcodes": objects})
+    except Exception as e:
+        print(e)
+        return "[]"
+
 
 
 if __name__ == '__main__':
