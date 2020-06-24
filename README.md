@@ -12,7 +12,7 @@ For installation on standard Ubuntu AWS Server.
 6. Check if service is running.
 
 ```
-sudo apt install python3 python3-opencv
+sudo apt install -y python3 python3-opencv
 git clone https://github.com/Skipperro/BarcodeScanner.git
 sudo cp ./BarcodeScanner/barcodes.service /etc/systemd/system/barcodes.service
 sudo systemctl daemon-reload
