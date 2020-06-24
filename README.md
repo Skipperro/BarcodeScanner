@@ -2,17 +2,19 @@
 
 ## Server installation
 
-For installation on standard Ubuntu AWS Server with "ubuntu" user.
+For installation on standard Ubuntu AWS Server.
 
-1. Clone repository.
-2. Copy service script and make it executable.
-3. Update service config.
-4. Start service.
-5. Check if service is running.
+1. Install required packages.
+2. Clone repository.
+3. Copy service script and make it executable.
+4. Update service config.
+5. Start service.
+6. Check if service is running.
 
 ```
+sudo apt install python3 python3-opencv
 git clone https://github.com/Skipperro/BarcodeScanner.git
-sudo cp /home/ubuntu/BarcodeScanner/barcodes.service /etc/systemd/system/barcodes.service
+sudo cp ./BarcodeScanner/barcodes.service /etc/systemd/system/barcodes.service
 sudo systemctl daemon-reload
 sudo systemctl start barcodes
 sudo systemctl enable barcodes
@@ -36,7 +38,7 @@ Important! File input must have "image" set as its name!
 ## Example of JSON response
 ```json
 {
-   "code":200,
+   "uuid": "df74615d-d8ca-46cf-9f7a-57131e3f3724",
    "time_ms":126,
    "barcodes":[
       {
