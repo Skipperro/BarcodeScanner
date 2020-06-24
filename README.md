@@ -14,7 +14,7 @@ For installation on standard Ubuntu AWS Server.
 
 ```
 sudo apt update
-sudo apt install -y python3 python3-opencv python3-pip
+sudo apt install -y python3 python3-opencv python3-pip libzbar0
 git clone https://github.com/Skipperro/BarcodeScanner.git
 pip3 install -r ./BarcodeScanner/requirements.txt
 sudo cp ./BarcodeScanner/barcodes.service /etc/systemd/system/barcodes.service
