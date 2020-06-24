@@ -13,7 +13,6 @@ For installation on standard Ubuntu AWS Server.
 
 ```
 sudo apt update
-sudo apt upgrade
 sudo apt install -y python3 python3-opencv
 git clone https://github.com/Skipperro/BarcodeScanner.git
 sudo cp ./BarcodeScanner/barcodes.service /etc/systemd/system/barcodes.service
