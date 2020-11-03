@@ -23,6 +23,13 @@ sudo systemctl start barcodes
 sudo systemctl enable barcodes
 ```
 
+Eventually you can run it with docker:
+
+```
+sudo docker build -t barcodeserver .
+sudo docker run -d -p 80:80 --name barcodes barcodeserver
+```
+
 ## Example of HTML page for sending a request
 
 Important! File input must have "image" set as its name!
