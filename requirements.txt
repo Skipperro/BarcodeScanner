@@ -11,6 +11,6 @@ opencv-python==4.2.0.34
 pyzbar==0.1.8
 requests==2.24.0
 simplejson==3.17.0
-urllib3==1.25.9
+urllib3==1.26.5
 waitress==1.4.4
 Werkzeug==1.0.1
